@@ -1,9 +1,9 @@
 const fs = require('fs-extra')
 
 const getConfig = async () => {
-    const reposJson = (await fs.readFile('./repos.json')).toString()
-    const repos = JSON.parse(reposJson)
-    return repos
+    const configJson = (await fs.readFile('./repos.json')).toString()
+    const config = JSON.parse(reposJson)
+    return config
 }
 
 module.exports = getConfig
