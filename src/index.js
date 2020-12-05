@@ -1,33 +1,27 @@
 
 require('dotenv').config()
 const git = require('nodegit')
+const forEach = require('./util/forEach')
 const resolveHome = require('./util/resolve-home')
+const getRepos = require('./getRepos')
+const syncRepo = require('./syncRepo')
+const run = require('./util/run')
 
 const start = async () => {
+	console.log("Started Nebula CI service.")
 	try {
-		console.log("Started Nebula Server CI service.")
-		const repoPath = resolveHome(process.env.REPO_PATH)
-		const repo = await git.Repository.open(repoPath)
+		const repos = await getRepos()
 		const intervalId = setInterval(() => {
-			const pull = async () => {
-				try {
-					const previousCommit = await repo.getBranchCommit(process.env.REPO_BRANCH)
-					await repo.fetchAll()
-					await repo.mergeBranches(process.env.REPO_BRANCH, process.env.REPO_REMOTE_BRANCH)
-					const currentCommit = await repo.getBranchCommit(process.env.REPO_BRANCH)
-					const prevId = previousCommit.id().tostrS()
-					const currId = currentCommit.id().tostrS()
-					// console.log(`${prevId} | ${currId}`)
-					if (prevId !== currId) {
-						console.log(
-							`Merged changes [${prevId} -> ${currId}].`
-						)
+			forEach(repos, 
+				({appName, repoPath, branch, remoteBranch, cmd}) => {
+					const absRepoPath = resolveHome(repoPath)
+					const repo = await git.Repository.open(absRepoPath)
+					const merged = await syncRepo(repo, {appName, branch, remoteBranch})
+					if (merged) {
+						run(cmd, {cwd: repoPath})
 					}
-				} catch (err) {
-					console.error(err)
-				}
-			}
-			pull()
+				}	
+			)
 		}, 6600)
 		process.on('exit', () => {
 			clearInterval(intervalId)
