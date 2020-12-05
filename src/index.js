@@ -11,12 +11,24 @@ const start = async () => {
 	console.log("Started Nebula CI service.")
 	try {
 		const repos = await getRepos()
+		const fetchOptions = {
+			callbacks: {
+				certificateCheck: () => (0),
+				credentials: (url, userName) => (
+					git.Cred.sshKeyFromAgent(userName)
+				)
+			}
+		}
 		const intervalId = setInterval(() => {
 			forEach(repos, 
 				async ({appName, repoPath, branch, remoteBranch, cmd}) => {
 					const absRepoPath = resolveHome(repoPath)
 					const repo = await git.Repository.open(absRepoPath)
-					const merged = await syncRepo(repo, {appName, branch, remoteBranch})
+					const merged = await syncRepo(
+						repo, 
+						{appName, branch, remoteBranch}, 
+						fetchOptions
+					)
 					if (merged && cmd) {
 						run(cmd, {cwd: repoPath})
 					}

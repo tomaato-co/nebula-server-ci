@@ -1,8 +1,12 @@
 
-const syncRepo = async (repo, {appName, branch, remoteBranch}) => {
+const syncRepo = async (
+    repo, 
+    {appName, branch, remoteBranch}, 
+    fetchOptions
+) => {
     try {
         const previousCommit = await repo.getBranchCommit(branch)
-        await repo.fetchAll()
+        await repo.fetchAll(fetchOptions)
         await repo.mergeBranches(branch, remoteBranch)
         const currentCommit = await repo.getBranchCommit(branch)
         const prevId = previousCommit.id().tostrS()
