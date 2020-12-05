@@ -32,7 +32,7 @@ const start = async () => {
 					if (merged && cmd) {
 						console.log(cmd)
 						console.log(repoPath)
-						await run(cmd, {cwd: repoPath})
+						await run(cmd, {cwd: absRepoPath})
 					}
 				}	
 			)
