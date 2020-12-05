@@ -10,11 +10,11 @@ const run = require('./util/run')
 const start = async () => {
 	console.log("Started Nebula CI service.")
 	try {
-		const {userName, repos} = await getConfig()
+		const {repos} = await getConfig()
 		const fetchOptions = {
 			callbacks: {
 				certificateCheck: () => (0),
-				credentials: () => (
+				credentials: (url, userName) => (
 					git.Cred.sshKeyFromAgent(userName)
 				)
 			}
