@@ -1,0 +1,20 @@
+{
+  "userName": "tomaato-co",
+  "repos": [
+    {
+       "appName": "gensave",
+       "repoPath": "~/apps/gensave",
+       "branch": "prod",
+       "remoteBranch": "origin/prod",
+       "cmd": "make prod"
+    },
+    {
+       "appName": "gensave-staging",
+       "repoPath": "~/staging/gensave",
+       "branch": "main",        
+       "remoteBranch": "origin/main",
+       "cmd": "make staging"
+    }
+  ]
+}
+
