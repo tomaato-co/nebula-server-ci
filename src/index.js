@@ -13,11 +13,11 @@ const start = async () => {
 		const repos = await getRepos()
 		const intervalId = setInterval(() => {
 			forEach(repos, 
-				({appName, repoPath, branch, remoteBranch, cmd}) => {
+				async ({appName, repoPath, branch, remoteBranch, cmd}) => {
 					const absRepoPath = resolveHome(repoPath)
 					const repo = await git.Repository.open(absRepoPath)
 					const merged = await syncRepo(repo, {appName, branch, remoteBranch})
-					if (merged) {
+					if (merged && cmd) {
 						run(cmd, {cwd: repoPath})
 					}
 				}	
