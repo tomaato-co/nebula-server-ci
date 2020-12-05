@@ -3,18 +3,18 @@ require('dotenv').config()
 const git = require('nodegit')
 const forEach = require('./util/forEach')
 const resolveHome = require('./util/resolve-home')
-const getRepos = require('./getRepos')
+const getConfig = require('./getConfig')
 const syncRepo = require('./syncRepo')
 const run = require('./util/run')
 
 const start = async () => {
 	console.log("Started Nebula CI service.")
 	try {
-		const repos = await getRepos()
+		const {userName, repos} = await getConfig()
 		const fetchOptions = {
 			callbacks: {
 				certificateCheck: () => (0),
-				credentials: (url, userName) => (
+				credentials: () => (
 					git.Cred.sshKeyFromAgent(userName)
 				)
 			}

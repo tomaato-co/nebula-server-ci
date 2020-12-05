@@ -1,9 +1,0 @@
-[
-    {
-        "appName": "Hello World",
-        "repoPath": "~/apps/hello-world",
-        "branch": "main",
-        "remoteBranch": "origin/main",
-        "cmd": "make prod"
-    }
-]
