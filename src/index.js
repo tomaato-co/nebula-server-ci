@@ -30,7 +30,9 @@ const start = async () => {
 						fetchOptions
 					)
 					if (merged && cmd) {
-						run(cmd, {cwd: repoPath})
+						console.log(cmd)
+						console.log(repoPath)
+						await run(cmd, {cwd: repoPath})
 					}
 				}	
 			)
